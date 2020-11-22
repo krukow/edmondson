@@ -1,3 +1,5 @@
+credentials.json
+/tokens
 pom.xml
 pom.xml.asc
 *.jar
