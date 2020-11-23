@@ -1,4 +1,4 @@
-{:paths ["resources" "src"]
+{:paths ["src/main/clojure"]
  :deps {org.clojure/clojure {:mvn/version "1.10.1"}
         com.google.api-client/google-api-client {:mvn/version "1.31.1"}
         com.google.apis/google-api-services-sheets {:mvn/version "v4-rev612-1.25.0"}
@@ -6,12 +6,11 @@
         clj-http/clj-http {:mvn/version "3.11.0"}
         cheshire/cheshire {:mvn/version "5.10.0"}
         incanter/incanter {:mvn/version "1.9.3" :exclusions [com.lowagie/itext]}}
+
  :aliases
- {:test {:extra-paths ["test"]
-         :extra-deps {org.clojure/test.check {:mvn/version "RELEASE"}}}
-  :runner
-  {:extra-deps {com.cognitect/test-runner
-                {:git/url "https://github.com/cognitect-labs/test-runner"
-                 :sha "209b64504cb3bd3b99ecfec7937b358a879f55c1"}}
-   :main-opts ["-m" "cognitect.test-runner"
-               "-d" "test"]}}}
+ {:test {:extra-paths ["src/test/clojure"]
+         :extra-deps {org.clojure/test.check {:mvn/version "1.1.0"}
+                      com.cognitect/test-runner
+                      {:local/root "../test-runner"}}
+         :main-opts ["-m" "cognitect.test-runner"
+                     "-d" "src/test/clojure"]}}}
