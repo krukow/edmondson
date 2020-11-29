@@ -8,9 +8,12 @@
         incanter/incanter {:mvn/version "1.9.3" :exclusions [com.lowagie/itext]}}
 
  :aliases
- {:test {:extra-paths ["src/test/clojure"]
+ {:examples {:extra-paths ["src/test/clojure" "examples"]
+             :extra-deps {org.clojure/test.check {:mvn/version "1.1.0"}}}}
+
+  :test {:extra-paths ["src/test/clojure"]
          :extra-deps {org.clojure/test.check {:mvn/version "1.1.0"}
                       com.cognitect/test-runner
                       {:local/root "../test-runner"}}
          :main-opts ["-m" "cognitect.test-runner"
-                     "-d" "src/test/clojure"]}}}
+                     "-d" "src/test/clojure"]}}

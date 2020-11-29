@@ -1,100 +1,8 @@
 (ns edmondson.survey-analysis
   (:require [incanter.stats :as istats]
             [clojure.string :as string]
-            [edmondson.config :as cfg]))
-
-
-(defn map-values
-  [f m]
-  (reduce-kv (fn [m k v] (assoc m k (f v))) {} m))
-
-;; Helper function which creates
-;; identifiers in the Qualtrics format.
-;; takes as input say :QID and "42" and creates keyword :QID_42_TEXT
-(defn- create-text-qid
-  [qid & args] ;; :QID "42" -> :QID_42_TEXT
-  (->> (concat [(name qid)] args ["TEXT"]) ;;(QUID 2 TEXT)
-       (string/join "_")
-       keyword))
-
-
-;;maps qualtrics internal question ids
-;;to the user defined and semantic question names
-(defmulti index-sub-questions
-  (fn [question _]
-    (:type (:questionType question)))) ;; dispatch on question type
-                                       ;; (see Qualtrics API)
-
-
-;; Multiple choice
-(defmethod index-sub-questions "MC"
-  [{:keys [questionType questionName choices] :as question}
-   qid]
-  ;;process choices with text entry
-  (reduce
-   (fn [acc [choice-id choice]]
-     (let [full-choice-id (create-text-qid qid (name choice-id))]
-       (if (contains? choice :textEntry)
-         ;; Multiple choice with text entry
-         (assoc acc full-choice-id
-                (create-text-qid (keyword questionName)
-                                 (name choice-id)))
-         acc)))
-   {} choices))
-
-;; text entry
-(defmethod index-sub-questions "TE" [{:keys [questionName]} qid]
-  ;;create an additional _TEXT question
-  {(create-text-qid qid) (create-text-qid questionName)})
-
-;; other
-(defmethod index-sub-questions "DB" [question qid] {}) ;; skip
-
-(defn index-survey-questions [details]
-  (reduce
-   (fn [acc [qid question]]
-     (-> acc
-       ;assoc qualtrics id with our question name: QID42 -> EFF-TEAM_PSY-SAFE-1
-         (assoc qid (keyword (:questionName question)))
-       ;create an merge in subquestions
-         (merge (index-sub-questions question qid))))
-   {}
-   (:questions details)))
-
-(defn normalize-responses
-  [survey-details responses]
-  (let [question-names (index-survey-questions survey-details)
-        id->label #(get question-names % %)
-        meta-data-keys #{:distributionChannel
-                         :_recordId
-                         :startDate
-                         :endDate
-                         :recordedDate
-                         :status
-                         :locationLongitude
-                         :locationLatitude
-                         :progress
-                         :duration
-                         :finished}]
-    (map (fn [response]
-           (-> response
-               (assoc :meta-data (select-keys (:values response)
-                                              meta-data-keys))
-
-               (assoc :answers
-                      ;;replaces keys of type question with question labels
-                      ;; e.g. id (QID167) with labels :SM-BATCH_MVP
-                      (into {}
-                            (map (fn [[qid qval]]
-                                   (if-let [qlabel (get (:labels response) qid)]
-                                     [(id->label qid) qlabel]
-                                     [(id->label qid) qval]))
-                                 (:values response))))
-               (dissoc :displayedFields :displayedValues :values :labels)
-
-               (update :answers #(into {} (remove (comp meta-data-keys first) %)))))
-
-         responses)))
+            [edmondson.config :as cfg]
+            [edmondson.utils :as u]))
 
 (defn score-answers
   [model-index {answers :answers :as normalized-response}]
@@ -193,9 +101,9 @@
                                       [x y]))
                                   normalized-scores)
         ;; ensure everything is a collection, even if only one response
-        scores-by-question (map-values #(if-not (coll? %) [%] %) scores-by-question)
+        scores-by-question (u/map-values #(if-not (coll? %) [%] %) scores-by-question)
 
-        question-stats (map-values
+        question-stats (u/map-values
                         #(let [variance (istats/variance %)]
                            {:score-total (reduce + %)
                             :score-mean  (istats/mean %)
