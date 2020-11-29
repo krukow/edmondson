@@ -14,10 +14,19 @@
         creds (cfg/google-credentials transport)
         factory (. JacksonFactory getDefaultInstance)
         service  (.. (new Sheets$Builder transport factory creds)
-                     (setApplicationName "survey-scorer")
+                     (setApplicationName "krukow/edmondson")
                      build)
         response (.. service (spreadsheets)
                      (values)
                      (get sheet range)
                      execute)]
     (seq (.getValues response))))
+
+
+(defn normalize-responses
+  [survey-questions responses]
+  (map-indexed (fn [n response]
+                 {:responseId n
+                  :meta-data {}
+                  :answers (zipmap survey-questions response)})
+               responses))
