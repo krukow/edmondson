@@ -74,6 +74,6 @@ In the browser, open the file: `examples` / `google_sheets` /
 
 Run the example notebook! If you need help navigating the Jupyter notebook,
 check out this documentation page:
-https://jupyterlab.readthedocs.io/en/stable/user/notebook.html.
+https://jupyterlab.readthedocs.io/en/stable/user/code_console.html#code-console.
 
 We encourage exploration by modifying each sections contents and re-evaluating.
