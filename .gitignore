@@ -1,5 +1,7 @@
 credentials.json
 /tokens
+examples/google_sheets/tokens/
+/examples/google_sheets/.ipynb_checkpoints/
 pom.xml
 pom.xml.asc
 *.jar
@@ -13,4 +15,6 @@ pom.xml.asc
 .lein-plugins/
 .lein-failures
 .nrepl-port
+.rebel_readline_history
+/.ipynb_checkpoints
 .cpcache/
