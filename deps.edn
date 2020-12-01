@@ -8,12 +8,26 @@
         incanter/incanter {:mvn/version "1.9.3" :exclusions [com.lowagie/itext]}}
 
  :aliases
- {:examples {:extra-paths ["src/test/clojure" "examples"]
-             :extra-deps {org.clojure/test.check {:mvn/version "1.1.0"}}}}
+ {:examples {:extra-paths ["src/test/clojure"
+                           "examples"]
+             :extra-deps {com.bhauman/rebel-readline {:mvn/version "0.1.4"}
+                          selmer/selmer {:mvn/version "1.12.31"}
+                          org.clojure/test.check {:mvn/version "1.1.0"}}}
+
+  :google-oauth2 {:exec-fn edmondson.google-api/generate-token
+                  :exec-args {:token-directory "./tokens"}}
+
+  :jupyter {:extra-deps {clojupyter/clojupyter {:mvn/version "0.3.2"}}}
+
+  :depstar
+  {:extra-deps
+   {seancorfield/depstar {:mvn/version "1.1.136"}}
+   :ns-default hf.depstar
+   :exec-args {}}
 
   :test {:extra-paths ["src/test/clojure"]
          :extra-deps {org.clojure/test.check {:mvn/version "1.1.0"}
                       com.cognitect/test-runner
                       {:local/root "../test-runner"}}
          :main-opts ["-m" "cognitect.test-runner"
-                     "-d" "src/test/clojure"]}}
+                     "-d" "src/test/clojure"]}} }

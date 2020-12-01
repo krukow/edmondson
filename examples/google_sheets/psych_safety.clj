@@ -1,8 +1,11 @@
-(ns examples.google-sheets.psych-safety
+(ns google-sheets.psych-safety
   (:require [edmondson.google-api :as api]
             [edmondson.survey-analysis :as analysis]
             [edmondson.survey-model :as model]
             [edmondson.reports :as reports]
+            rebel-readline.core
+            rebel-readline.clojure.line-reader
+            rebel-readline.clojure.service.local
             [clojure.string :as str]))
 
 ;; Example of usage.
@@ -85,7 +88,9 @@
 
 
 (def spreadsheet-range (str tab-name "!B:R")) ;; this is where the answers are
-(def survey-results (api/eval-range spreadsheetId spreadsheet-range))
+(def survey-results (api/eval-range {:token-directory "tokens"}
+                                    spreadsheetId
+                                    spreadsheet-range))
 (def survey-questions (first survey-results)) ;; first row of sheet are the questions
 (def survey-answers (rest survey-results)) ;; first row of sheet are the questions
 
@@ -99,6 +104,22 @@
 
 (def aggregate-results
   (analysis/aggregate-scores example-model scored-responses))
+
+(defn report [construct]
+  (reports/print-analysis example-model construct scored-responses))
+
+(defn -main [& args]
+  (rebel-readline.core/with-readline-in
+      (rebel-readline.clojure.line-reader/create
+       (rebel-readline.clojure.service.local/create))
+    (clojure.main/repl
+     :init #(do
+              (in-ns 'google-sheets.psych-safety)
+              (use 'edmondson.reports)
+              (use 'clojure.pprint)
+              (println "Try (report X) where X is one of the following:")
+              (clojure.pprint/pprint (keys example-model)))
+     :prompt (fn[]))))
 
 
 
