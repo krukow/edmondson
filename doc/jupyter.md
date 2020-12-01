@@ -73,7 +73,7 @@ In the browser, open the file: `examples` / `google_sheets` /
 `psych_safety.ipynb` using the kernel `Clojure (edmondson)`.
 
 Run the example notebook! If you need help navigating the Jupyter notebook,
-check out this documentation page:
-https://jupyterlab.readthedocs.io/en/stable/user/code_console.html#code-console.
+check out [this overview documentation
+page](https://jupyterlab.readthedocs.io/en/stable/getting_started/overview.html).
 
 We encourage exploration by modifying each sections contents and re-evaluating.
