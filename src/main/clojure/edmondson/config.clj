@@ -29,7 +29,9 @@
 (def ^:dynamic *debug-http* false)
 (def ^:dynamic *config-override* nil)
 (def ^:dynamic *access-token* nil)
-(def config-filename "EDMONDSON_CONFIG")
+(def config-filename "edmondson-config.json")
+(def credentials-json-path-env "GOOGLE_CREDENTIALS_JSON")
+(def ^:dynamic *credentials-json-path-override* nil)
 (def qualtrics-token "QUALTRICS_TOKEN")
 
 (defn debug-from-env?
@@ -110,15 +112,18 @@
   (:qualtrics-base-url (config)))
 
 (defn google-credentials
-  [transport]
-  (with-open [rdr (clojure.java.io/reader "credentials.json")]
+  [transport token-dir-path]
+  (with-open [rdr (clojure.java.io/reader
+                   (if *credentials-json-path-override*
+                     *credentials-json-path-override*
+                     (environment-config credentials-json-path-env)))]
     (let [factory (. JacksonFactory getDefaultInstance)
           secrets
           (GoogleClientSecrets/load factory rdr)
           flow (.. (new GoogleAuthorizationCodeFlow$Builder
                         transport factory secrets [SheetsScopes/SPREADSHEETS_READONLY])
                    (setDataStoreFactory
-                    (new FileDataStoreFactory (new java.io.File "tokens")))
+                    (new FileDataStoreFactory (io/file token-dir-path)))
                    (setAccessType "offline")
                    build)
           receiver (.. (new LocalServerReceiver$Builder)

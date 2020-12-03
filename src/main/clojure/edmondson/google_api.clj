@@ -9,9 +9,18 @@
                                       SheetsScopes)
            (com.google.api.services.sheets.v4.model ValueRange)))
 
-(defn eval-range [sheet range]
+(defn generate-token
+  [google-config]
+    (let [transport (. GoogleNetHttpTransport newTrustedTransport)
+          creds (cfg/google-credentials transport
+                                        (str (:token-directory google-config)))
+          factory (. JacksonFactory getDefaultInstance)]
+      (println "Token stored in: " (:token-directory google-config))))
+
+(defn eval-range [google-config sheet range]
   (let [transport (. GoogleNetHttpTransport newTrustedTransport)
-        creds (cfg/google-credentials transport)
+        creds (cfg/google-credentials transport
+                                      (str (:token-directory google-config)))
         factory (. JacksonFactory getDefaultInstance)
         service  (.. (new Sheets$Builder transport factory creds)
                      (setApplicationName "krukow/edmondson")
