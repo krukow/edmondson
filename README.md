@@ -8,9 +8,9 @@ This section serves as a quick guide for getting started. Please refer to the
 [doc](./doc) for more documentation.
 
 ## Prerequisites
+You don't need to understand Java or Clojure to use this. These are merely runtime dependencies that need to be installed to run.
 
-
-### Java/JDK
+### 1. Java/JDK
 You must have Java/JDK installed (e.g.
 [adoptopenjdk.net](https://adoptopenjdk.net/)).
 
@@ -21,14 +21,14 @@ export JAVA_HOME=`/usr/libexec/java_home`
 export PATH=$JAVA_HOME/bin:$PATH
 ```
 
-### Clojure CLI
+### 2. Clojure CLI
 You must also have [Clojure and Clojure CLI tools
 installed](https://clojure.org/guides/getting_started#_clojure_installer_and_cli_tools).
 
-### Clone this repo
+### 3. Clone this repo
 Clone this repo into a local directory on your machine.
 
-### API access
+### 4. API access
 You'll need API access to a survey service provider. In this example, we'll use
 Google.
 
