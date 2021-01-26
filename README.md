@@ -14,6 +14,8 @@ You don't need to understand Java or Clojure to use this. These are merely runti
 You must have Java/JDK installed (e.g.
 [adoptopenjdk.net](https://adoptopenjdk.net/)).
 
+**NOTE**: If you are running OS X, you may be able to skip this step.
+
 On OS X, I have:
 
 ```bash
@@ -62,18 +64,36 @@ see the form here:
   link](https://docs.google.com/forms/d/1iaECjHrGRd1uZsl7IlPktHnDj9xZLqNoUjcicvwDUY0/edit?usp=sharing).
 
 ### Analyzing the data with a Clojure REPL
-Start the example with the following command. 
+
+Here is an example using Google Sheets:
+
+1. Update the spreadsheet id and tab name in the [psych_safety.clj](https://github.com/krukow/edmondson/blob/main/examples/google_sheets/psych_safety.clj) script to match your survey spreadsheet
+
+```clojure
+;; Example of usage.
+;; Given https://docs.google.com/spreadsheets/d/1QkBeMNGfsHHga85c-UsLAwnpmz7QyhvFK_n31CzDe7c/edit?usp=sharing
+;; Define:
+
+(def spreadsheetId "1QkBeMNGfsHHga85c-UsLAwnpmz7QyhvFK_n31CzDe7c")
+(def tab-name "Form Responses 1")
+```
+
+2. Execute the script
 
 (Note: the first time this runs, it takes a while because it downloads project
 dependencies on the fly.)
 
     clj -A:examples -m google-sheets.psych-safety
 
+3. Authenticate with Google
+
 Your browser will open, asking you to authenticate with a Google account. This
 is required to generate an OAUTH token to access the API.
 
 If this doesn't work, check that you've set up the environment variable
 `GOOGLE_CREDENTIALS_JSON`. 
+
+4. Run the report
 
 You should see something similar to:
 
