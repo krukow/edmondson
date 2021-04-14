@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 SOURCE="${BASH_SOURCE[0]}"
@@ -9,7 +8,8 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
-BUILD_DIR=$(readlink -f $DIR/..)
-# Build uberjar
-cd $BUILD_DIR
-clojure -X:depstar:jupyter uberjar :jar target/Edmondson-standalone.jar
+BUILD_DIR=$(readlink -f "$DIR/..")
+
+echo "Cleaning build"
+rm -rf target
+mkdir target
