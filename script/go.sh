@@ -20,4 +20,4 @@ clojure -A:jupyter -m clojupyter.cmdline remove-install edmondson
 set -e
 clojure -A:jupyter -m clojupyter.cmdline install --ident edmondson --jarfile target/Edmondson-standalone.jar
 
-jupyter lab
+jupyter lab --port=8889
