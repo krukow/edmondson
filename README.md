@@ -7,30 +7,7 @@ survey-systems like Google Forms and Qualtrics.
 This section serves as a quick guide for getting started. Please refer to the
 [doc](./doc) for more documentation.
 
-## Prerequisites
-You don't need to understand Java or Clojure to use this. These are merely runtime dependencies that need to be installed to run.
-
-### 1. Java/JDK
-You must have Java/JDK installed (e.g.
-[adoptopenjdk.net](https://adoptopenjdk.net/)).
-
-**NOTE**: If you are running OS X, you may be able to skip this step.
-
-On OS X, I have:
-
-```bash
-export JAVA_HOME=`/usr/libexec/java_home`
-export PATH=$JAVA_HOME/bin:$PATH
-```
-
-### 2. Clojure CLI
-You must also have [Clojure and Clojure CLI tools
-installed](https://clojure.org/guides/getting_started#_clojure_installer_and_cli_tools).
-
-### 3. Clone this repo
-Clone this repo into a local directory on your machine.
-
-### 4. API access
+### API access
 You'll need API access to a survey service provider. In this example, we'll use
 Google.
 
@@ -41,10 +18,12 @@ Google.
   to generate `credentials.json`.
 * You don't need to other steps. Just download and save `credentials.json` to
   your working directory.
-* Set the environment variable `GOOGLE_CREDENTIALS_JSON` to the path to
-  `credentials.json`. For example, in a bash shell session:
 
-      export GOOGLE_CREDENTIALS_JSON=`pwd`/credentials.json
+### Using code spaces
+* Clone the project into a directory
+* Open [VSCode](https://code.visualstudio.com/) in the project directory (`$ code .`)
+* In the pop-up select "Reopen in container" (or run F1: Remote containers: Rebuild and Reopen in container)
+* Once the container has started, run `./script/go.sh` 
 
 ## Run an example
 To test that everything works as expected, you can run one of the examples in
