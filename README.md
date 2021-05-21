@@ -1,14 +1,16 @@
 # Edmondson
 An extensible, easy-to-use toolkit for analyzing and scoring survey constructs
-like psychological safety and generative culture. Supports multiple
-survey-systems like Google Forms and Qualtrics.
+like psychological safety and generative culture. Extensible to support multiple
+survey-systems like Google Forms or Qualtrics (supports only Google Forms
+currently).
 
 # Quick start
 This section serves as a quick guide for getting started. Please refer to the
 [doc](./doc) for more documentation.
 
-## Prerequisites
-You don't need to understand Java or Clojure to use this. These are merely runtime dependencies that need to be installed to run.
+## Prerequisites - running locally
+You don't need to understand Java or Clojure to use this. These are merely
+runtime dependencies that need to be installed to run.
 
 ### 1. Java/JDK
 You must have Java/JDK installed (e.g.
@@ -48,35 +50,31 @@ Google.
 
 ## Run an example
 To test that everything works as expected, you can run one of the examples in
-the `examples` directory. There are two main ways to do this: using a [Clojure
-CLI REPL](https://clojure.org/reference/deps_and_cli), and using
-[Jupyter](https://jupyter.org/). In this quick-start guide we'll do the former
-because Jupyter requires installing more software (although it's quite cool!).
+the `examples` directory. There are two main ways to do this:
+
+1. using a [Clojure CLI REPL](https://clojure.org/reference/deps_and_cli); and
+2. using [Jupyter](https://jupyter.org/).
+
+In this quick-start guide we'll do the former because Jupyter requires
+installing more software (although it's quite cool!). For Jupyter instructions
+see [./doc/jupyter.md](./doc/jupyter.md).
 
 ### The Survey
 The example uses a Google Forms survey on team health (with dummy data). You can
 see the form here: 
 
-* Survey link: https://forms.gle/ByXsuvB614vopVVF7
+* Survey link: https://forms.gle/kVVMKEpbBZKsDwc8A
 * [Survey results as Google
-  sheet](https://docs.google.com/spreadsheets/d/1QkBeMNGfsHHga85c-UsLAwnpmz7QyhvFK_n31CzDe7c/edit?usp=sharing).
+  sheet](https://docs.google.com/spreadsheets/d/1S_p5d9YrPg1_sawbhhTRNPJPfvnRweFmC4-OxvYhzao/edit?usp=sharing).
 * If you want to make a copy of this form, [use this
-  link](https://docs.google.com/forms/d/1iaECjHrGRd1uZsl7IlPktHnDj9xZLqNoUjcicvwDUY0/edit?usp=sharing).
+  link](https://docs.google.com/forms/d/1ypwK5o1R1isZbXmeC5NCkz2X3VSLoEY-whXvqAMFGv8/edit?usp=sharing).
 
 ### Analyzing the data with a Clojure REPL
 
 Here is an example using Google Sheets:
 
-1. Update the spreadsheet id and tab name in the [psych_safety.clj](https://github.com/krukow/edmondson/blob/main/examples/google_sheets/psych_safety.clj) script to match your survey spreadsheet
-
-```clojure
-;; Example of usage.
-;; Given https://docs.google.com/spreadsheets/d/1QkBeMNGfsHHga85c-UsLAwnpmz7QyhvFK_n31CzDe7c/edit?usp=sharing
-;; Define:
-
-(def spreadsheetId "1QkBeMNGfsHHga85c-UsLAwnpmz7QyhvFK_n31CzDe7c")
-(def tab-name "Form Responses 1")
-```
+1. Set the environment variable `RESULTS_URL` to the survey results Google Sheet
+   (or leave blank to use the default example link).
 
 2. Execute the script
 

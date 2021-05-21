@@ -21,9 +21,8 @@
                            qs q-texts scores)]
             lines))]
 
-    (println "Total score: " (fmt-number (get-in res [:construct-stats :score-total])))
-    (println "Mean score: " (fmt-number (get-in res [:construct-stats :score-mean])))
-    (println "Score stddev: " (fmt-number (get-in res [:construct-stats :score-stddev])))
+    (println "Mean score: " (fmt-number (get-in res [:construct-stats :avg :mean])))
+    (println "Score stddev: " (fmt-number (get-in res [:construct-stats :avg :stddev])))
 
     (println)
     (println "Worst responses scored")

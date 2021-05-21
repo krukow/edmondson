@@ -10,21 +10,23 @@
             LocalServerReceiver
             LocalServerReceiver$Builder)
            (com.google.api.services.sheets.v4 SheetsScopes)
+           (com.google.api.services.drive Drive DriveScopes)
            (com.google.api.client.googleapis.auth.oauth2
             GoogleAuthorizationCodeFlow
             GoogleAuthorizationCodeFlow$Builder)
-            (com.google.api.client.googleapis.auth.oauth2 GoogleClientSecrets)
-            (com.google.api.client.http.javanet NetHttpTransport)
-            (com.google.api.client.json JsonFactory)
-            (com.google.api.client.json.jackson2 JacksonFactory)
-            (com.google.api.client.util.store FileDataStoreFactory)))
+           (com.google.api.client.googleapis.auth.oauth2 GoogleClientSecrets)
+           (com.google.api.client.http.javanet NetHttpTransport)
+           (com.google.api.client.json.gson GsonFactory)
+           (com.google.api.client.util.store FileDataStoreFactory)))
 
-(defn- environment-config
-  [name]
-  (let [env (System/getenv name)]
-    (if (string/blank? env)
-      nil
-      env)))
+(defn environment-config
+  ([name]
+   (environment-config name nil))
+  ([name default-value]
+   (let [env (System/getenv name)]
+     (if (string/blank? env)
+       default-value
+       env))))
 
 (def ^:dynamic *debug-http* false)
 (def ^:dynamic *config-override* nil)
@@ -116,12 +118,13 @@
   (with-open [rdr (clojure.java.io/reader
                    (if *credentials-json-path-override*
                      *credentials-json-path-override*
-                     (environment-config credentials-json-path-env)))]
-    (let [factory (. JacksonFactory getDefaultInstance)
+                     (environment-config credentials-json-path-env "credentials.json")))]
+    (let [factory (. GsonFactory getDefaultInstance)
           secrets
           (GoogleClientSecrets/load factory rdr)
           flow (.. (new GoogleAuthorizationCodeFlow$Builder
-                        transport factory secrets [SheetsScopes/SPREADSHEETS_READONLY])
+                        transport factory secrets [SheetsScopes/SPREADSHEETS_READONLY
+                                                   DriveScopes/DRIVE_FILE])
                    (setDataStoreFactory
                     (new FileDataStoreFactory (io/file token-dir-path)))
                    (setAccessType "offline")

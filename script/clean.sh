@@ -8,7 +8,12 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
-BUILD_DIR=$(readlink -f "$DIR/..")
+if [ "$(uname -s)" = 'Linux' ]; then
+    BUILD_DIR=$(readlink -f "$DIR/..")
+else
+    BUILD_DIR="$DIR/.."
+fi
+cd $BUILD_DIR
 
 echo "Cleaning build"
 rm -rf target

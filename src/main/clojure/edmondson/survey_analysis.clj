@@ -1,6 +1,7 @@
 (ns edmondson.survey-analysis
   (:require [incanter.stats :as istats]
             [clojure.string :as string]
+            [edmondson.survey-model :as model]
             [edmondson.config :as cfg]
             [edmondson.utils :as u]))
 
@@ -54,9 +55,29 @@
         (assoc :groups
                (reduce group-answer {} (:answers normalized-response))))))
 
+
 (defn score-responses
-  [model-index normalized-responses]
-  (map #(score-answers model-index %) normalized-responses))
+  [model normalized-responses]
+  (let [model-index (model/index-questions model)
+        scored-responses (map #(score-answers model-index %) normalized-responses)
+        measure-construct
+        (fn [scored-response [construct spec]]
+          (let [{qs :questions
+                 measures :measures} spec
+                qs-keys (map #(if (coll? %) (first %) %) qs) ;; just question keys in model
+                construct-scores (->> qs-keys
+                                      (select-keys (:scores scored-response))
+                                      (remove (fn [[k v]] (= :excluded v)))
+                                      (into {}))]
+            (assoc-in
+             scored-response [:measures construct]
+             (merge
+              (get-in scored-response [:measures construct] {})
+              (u/map-values (fn [m]
+                              (m construct-scores))
+                            measures)))))]
+    (map (fn [r] (reduce measure-construct r model))
+         scored-responses)))
 
 
 (defn- aggregate-model-construct
@@ -66,12 +87,13 @@
         qs-keys (map #(if (coll? %) (first %) %) qs) ;; just question keys in model
 
         normalized-scores (map #(with-meta
-                       (->> qs-keys
-                            (select-keys (:scores %))
-                            (remove (fn [[k v]] (= :excluded v)))
-                            (into {}))
-                       (-> (:meta-data %)
-                           (assoc :responseId (:responseId %))))
+                                  (->> qs-keys
+                                       (select-keys (:scores %))
+                                       (remove (fn [[k v]] (= :excluded v)))
+                                       (into {}))
+                                  (-> (:meta-data %)
+                                      (assoc :responseId (:responseId %))
+                                      (assoc :measures (:measures %))))
                     scored-responses)
 
         ;; compute aggregate scores across questions
@@ -79,18 +101,41 @@
         aggregate-scores (map #(let [vs (vals %)
                                      num-answers (count vs)]
                                  ;;#dbg ^{:break/when (some keyword? vs)}
-                                 (with-meta
-                                   {:mean-score (istats/mean vs)
-                                    :num-answers num-answers
-                                    :num-questions (count (keys %))}
-                                   (meta %)))
+                                 (let [measures (:measures (meta %))]
+                                   (with-meta
+                                     {:mean-score (istats/mean vs)
+                                      :measures (get measures construct)
+                                      :num-answers num-answers
+                                      :num-questions (count (keys %))}
+                                     (meta %))))
                               normalized-scores)
-        non-empty-scores (remove #(= (:num-answers %) 0)
+
+        complete-answers (filter #(= (:num-answers %) (count qs-keys))
                                  aggregate-scores)
 
-        worst-scores (sort-by :mean-score non-empty-scores)
+        worst-scores (sort-by :mean-score complete-answers)
         best-scores (reverse worst-scores)
-        score-variance (istats/variance (map :mean-score non-empty-scores))
+
+        construct-measures (apply merge-with
+                            (fn [x y]
+                              (if (coll? x)
+                                (conj x y)
+                                [x y]))
+                            (map #(get-in (meta %) [:measures construct]) complete-answers))
+        construct-measures (u/map-values #(if-not (coll? %) [%] %) construct-measures)
+
+        construct-measures-stats
+        (u/map-values (fn [ms]
+                        (let  [variance (istats/variance ms)]
+                          {:mean (istats/mean ms)
+                           :variance variance
+                           :quantile (istats/quantile
+                                      ms
+                                      :probs [0.0 0.15 0.25 0.5 0.75 0.85 1.0])
+                           :stddev (Math/sqrt variance)}))
+                      construct-measures)
+
+        score-variance (istats/variance (map :mean-score complete-answers))
         score-stddev (Math/sqrt score-variance)
 
 
@@ -120,7 +165,8 @@
                               (map first))
         varying-question (reverse stable-question)
 
-        sub-construct-scores (map :score-mean (vals question-stats))
+
+        sub-construct-scores (map :mean-score complete-answers)
 
         construct-score-total (reduce + 0 sub-construct-scores)
         construct-mean (istats/mean sub-construct-scores)
@@ -140,14 +186,10 @@
                              (fn [x y] (if (coll? x) (conj x y) [x y]))
                              verbatims)]
     [construct
-     {:construct-stats
-      {:score-total construct-score-total
-       :score-mean construct-mean
-       :score-variance construct-var
-       :score-stddev construct-stddev}
+     {:construct-stats construct-measures-stats
 
       :response-stats
-      {:response-mean-scores aggregate-scores
+      {:response-scores aggregate-scores
        :worst-scores worst-scores
        :best-scores best-scores
        :response-score-variance score-variance
@@ -167,3 +209,30 @@
   [model scored-responses]
   (into {} (map #(aggregate-model-construct % scored-responses)
                 model)))
+
+(defn score->answer
+  [model-index qid score]
+  (let [q-scores (:scoring (get model-index qid))
+        scale (:scale (get model-index qid))
+        scaled-score (scale score q-scores)]
+    (some (fn [[answer qscore]]
+            (when (= qscore scaled-score) answer))
+          q-scores)))
+
+(defn take-questions
+  [type n aggregate-results]
+  (let [stats (get aggregate-results :question-stats)
+        qid-seq (take n (get stats type))]
+    (map (fn [qid]
+           [qid (merge
+                 {:score-distribution (get-in stats [:scores-by-question qid])}
+                 (get-in stats [:question-stats qid]))])
+         qid-seq)))
+
+(defn filter-responses [ks pred responses]
+  (let [measure-predicate (fn [response]
+                            (let [measure (get-in response (concat [:measures] ks))]
+                              (if (Double/isNaN measure)
+                                false
+                                (pred measure))))]
+    (filter measure-predicate responses)))
