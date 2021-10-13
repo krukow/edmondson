@@ -1,5 +1,6 @@
 # Contributing
-TBD
+
+See [./jupyter.md](./jupyter.md) and follow the instructions for local or Codespaces development.
 
 ## Development Environment
 This assumes familiarity with Clojure development.
