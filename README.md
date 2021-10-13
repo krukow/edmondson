@@ -48,7 +48,9 @@ Google.
     * Set the environment variable `GOOGLE_CREDENTIALS_JSON` to the path to
   `credentials.json`. For example, in a bash shell session:
 
+```
       export GOOGLE_CREDENTIALS_JSON=`pwd`/client_secret_....json
+```
 
 ## Test authorization
 
