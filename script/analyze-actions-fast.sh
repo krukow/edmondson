@@ -6,9 +6,6 @@ echo "Copy workspace"
 cp -r work workspace
 cd workspace
 
-echo "Building"
-./script/go.sh
-
 echo "Installing template"
 cp templates/nbconvert_template_altair.tpl /opt/conda/share/jupyter/nbconvert/templates/lab/nbconvert_template_altair.tpl
 cat templates/custom.css >> /opt/conda/share/jupyter/nbconvert/templates/lab/static/index.css

@@ -38,15 +38,43 @@ Google.
 
 * Find the Google Sheets API Java Quickstart page ([currently
   here](https://developers.google.com/sheets/api/quickstart/java)).
-* Complete ["Step
-  1"](https://developers.google.com/sheets/api/quickstart/java#step_1_turn_on_the)
-  to generate `credentials.json`.
-* You don't need to other steps. Just download and save `credentials.json` to
-  your working directory.
-* Set the environment variable `GOOGLE_CREDENTIALS_JSON` to the path to
+* Complete ["Prerequisites (gradle not needed)"](https://developers.google.com/sheets/api/quickstart/java#prerequisites) to generate `credentials.json`.
+
+    * Enable the Google sheets API (and optionally the Google Drive API)
+    * Click "Create credentials" in APIs & Services menu (Credentials). Create an Create OAuth client ID.
+    * Add Google sheets scope: auth/spreadsheets.readonly (optionally Google Drive API scope ../auth/drive.file).
+    * Just download and save JSON file.
+    to your working directory.
+    * Set the environment variable `GOOGLE_CREDENTIALS_JSON` to the path to
   `credentials.json`. For example, in a bash shell session:
 
-      export GOOGLE_CREDENTIALS_JSON=`pwd`/credentials.json
+      export GOOGLE_CREDENTIALS_JSON=`pwd`/client_secret_....json
+
+## Test authorization
+
+To test that your OAuth app is set up run
+
+    $ clj -X:google-oauth2
+
+You should see something like:
+
+``` bash
+Please open the following address in your browser:
+  https://accounts.google.com/o/oauth2/auth?access_type=offline&client_id=10...
+Attempting to open that address in the default browser now...
+```
+
+Authenticate using the same account that created the A Google Cloud Platform project.
+
+Accept that app access and you should see "Received verification code. You may now close this window."
+
+The terminal should now show
+
+``` bash
+Token stored in:  ./tokens
+```
+
+You have succesfully authenticated and can try the example below.
 
 ## Run an example
 To test that everything works as expected, you can run one of the examples in
@@ -61,7 +89,7 @@ see [./doc/jupyter.md](./doc/jupyter.md).
 
 ### The Survey
 The example uses a Google Forms survey on team health (with dummy data). You can
-see the form here: 
+see the form here:
 
 * Survey link: https://forms.gle/kVVMKEpbBZKsDwc8A
 * [Survey results as Google
@@ -83,21 +111,12 @@ dependencies on the fly.)
 
     clj -A:examples -m google-sheets.psych-safety
 
-3. Authenticate with Google
-
-Your browser will open, asking you to authenticate with a Google account. This
-is required to generate an OAUTH token to access the API.
-
-If this doesn't work, check that you've set up the environment variable
-`GOOGLE_CREDENTIALS_JSON`. 
-
-4. Run the report
+3. Run a report
 
 You should see something similar to:
 
     WARNING: When invoking clojure.main, use -M
-    Please open the following address in your browser:
-    https://accounts.google.com/o/oauth2/auth?access_type=offline&client_id=1060853483984-8cv31681n8ll0onat045mgsrt2hgt9i5.apps.googleusercontent.com&redirect_uri=http://localhost:8888/Callback&response_type=code&scope=https://www.googleapis.com/auth/spreadsheets.readonly
+
     Attempting to open that address in the default browser now...
 
     Try (report X) where X is one of the following:
@@ -112,7 +131,7 @@ This is good - it means that things are working.
 You now have a Clojure REPL with some pre-loaded data and functions. Even if
 you're not familiar with Clojure, you can use this to explore the data and
 functionality. Try typing `(report "Psychological safety")` and press enter. You
-may need to scroll up, but you should see something like: 
+may need to scroll up, but you should see something like:
 
     google-sheets.psych-safety=> (report "Psychological safety")
     Psychological safety
@@ -134,7 +153,7 @@ may need to scroll up, but you should see something like:
     ...
 
 While you may not understand the scores yet, what you are seeing is an analysis
-of psychological safety in the example survey data. 
+of psychological safety in the example survey data.
 
 That's it - things are working now! Now check out "Next steps" below.
 
@@ -148,7 +167,7 @@ One of the following might be good next steps:
 
 
 # Copyright and License
-Copyright © 2020 Karl Krukow and contributors.
+Copyright © 2021 Karl Krukow and contributors.
 
 All rights reserved. The use and distribution terms for this software are
 covered by the MIT LICENSE which can be found in the file LICENSE at the root of
