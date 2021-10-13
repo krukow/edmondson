@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+jupyter trust examples/google_sheets/*.ipynb
+jupyter lab --port=8889 --config config/jupyter_notebook_config.py
