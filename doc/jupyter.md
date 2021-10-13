@@ -73,10 +73,10 @@ Now in a terminal in Codespaces, run
 ``` bash
  $ ./lab
 ...
-    http://127.0.0.1:8888/lab?token=a2eae6494223edc81e6cf797735b10468148912590dcb8c0
+    http://127.0.0.1:8889/lab?token=a2eae6494223edc81e6cf797735b10468148912590dcb8c0
 ```
 
-Codespaces should forward port 8888. Click "Open in browser" button in codespaces.
+Codespaces should forward port 8889. Click "Open in browser" button in codespaces.
 
 You may see "Token authentication is enabled". In this case enter the token that
 is output (in the above example: a2eae6494223edc81e6cf797735b10468148912590dcb8c0).
