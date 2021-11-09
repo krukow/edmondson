@@ -16,10 +16,10 @@ fi
 cd $BUILD_DIR
 
 echo "Building"
-./script/build.sh
+uber_jar=$(./script/build.sh $@)
 
-echo "Installing"
+echo "Installing: $uber_jar"
 set +e
 /usr/local/bin/clojure -A:jupyter -m clojupyter.cmdline remove-install edmondson
 set -e
-/usr/local/bin/clojure -A:jupyter -m clojupyter.cmdline install --ident edmondson --jarfile target/Edmondson-standalone.jar
+/usr/local/bin/clojure -A:jupyter -m clojupyter.cmdline install --ident edmondson --jarfile $uber_jar

@@ -1,21 +1,22 @@
 # Documentation
+
 TBD
 
 
 ## Building base container
 
-1. Update `..devcontainer/Dockerfile` with the appropriate changes
+1. Update `.devcontainer/Dockerfile` with the appropriate changes.
 
-2. run `docker build -f .devcontainer/Dockerfile -t krukow/edmondson:<version> ./images`
+1a. `mkdir tmp`
 
-3. run `docker push krukow/edmondson:v1.3.3`
+2. run `docker build -f .devcontainer/Dockerfile -t krukow/edmondson:<version> ./tmp`
+
+3. run `docker push krukow/edmondson:<version>`
 
 
 ## Building a -dev docker container
 
-0. cd to `edmondson-private`
-
-1. Use the latest `<base-container-version>` (see building base container).
+Use the latest `<base-container-version>` (see building base container).
 
 ```
 docker run -it -u jovyan -p 8888:8888 \
@@ -29,7 +30,7 @@ docker run -it -u jovyan -p 8888:8888 \
 
 ``` bash
 (base) jovyan@4234588889ae:~$ cd work/
-(base) jovyan@4234588889ae:~/work$ ./script/go.sh
+(base) jovyan@4234588889ae:~/work$ ./script/go.sh docker
 Building
 Downloading:...
 ...
@@ -51,6 +52,3 @@ docker commit --author "Karl Krukow <krukow@github.com>" -m "<msg>" <cont-id> kr
 ``` bash
 docker push krukow/edmondson:<version>
 ```
-
-5. Use this version from GH actions: in `.github/workflows/analyze2.yml`
-edit the line that invokes docker run and update `krukow/edmondson:{version}`.

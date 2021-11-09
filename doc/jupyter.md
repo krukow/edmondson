@@ -38,7 +38,7 @@ You should see ![Codespaces loading screenshot](https://user-images.githubuserco
 Once Codespaces is open run the following in a terminal
 
 ``` bash
-$ jovyan@codespaces_82e6c5:/workspaces/edmondson$ ./script/go.sh
+$ jovyan@codespaces_82e6c5:/workspaces/edmondson$ ./script/go.sh docker
 Building
 Building uber jar: target/Edmondson-standalone.jar
 Installing
@@ -104,7 +104,7 @@ Run
 docker run -it -u jovyan -p 8888:8888 -p 8889:8889 \
             -v ${PWD}:/home/jovyan/work/ \
             -w /home/jovyan/ \
-            krukow/edmondson:v1.3.3-dev3 \
+            krukow/edmondson:v1.3.3-dev6 \
             /bin/bash
 ```
 
@@ -112,7 +112,7 @@ Then in the container, run
 
 ``` bash
 jovyan@810490d944d0:~$ cd work/
-jovyan@810490d944d0:~/work$ ./script/go.sh
+jovyan@810490d944d0:~/work$ ./script/go.sh docker
 ...
 ```
 
