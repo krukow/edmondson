@@ -17,4 +17,13 @@ fi
 cd $BUILD_DIR
 # Build uberjar
 cd $BUILD_DIR
-MAVEN_OPTS="-Dmaven.wagon.httpconnectionManager.ttlSeconds=25 -Dmaven.wagon.http.retryHandler.count=3" /usr/local/bin/clojure -X:depstar:jupyter uberjar :jar target/Edmondson-standalone.jar
+
+opts="-Dmaven.wagon.httpconnectionManager.ttlSeconds=25 -Dmaven.wagon.http.retryHandler.count=3"
+
+if [ "$1" == "docker" ];
+then
+    MAVEN_OPTS=$opts /usr/local/bin/clojure -X:depstar:jupyter uberjar :jar target/Edmondson-standalone.jar 1>/dev/null
+    echo "target/Edmondson-standalone.jar"
+else
+    MAVEN_OPTS=$opts /usr/local/bin/clojure -T:build uber
+fi

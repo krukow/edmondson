@@ -23,15 +23,23 @@
 
   :jupyter {:extra-deps {clojupyter/clojupyter {:mvn/version "0.3.3-alpha2"}}}
 
+
   :depstar
   {:extra-deps
    {seancorfield/depstar {:mvn/version "1.1.136"}}
    :ns-default hf.depstar
    :exec-args {}}
 
+  :build
+  {:deps
+   {io.github.clojure/tools.build {:git/tag "v0.6.2" :git/sha "226fb52"}}
+   :ns-default build}
+
+  ;; v0.5.0
   :test {:extra-paths ["src/test/clojure"]
-         :extra-deps {org.clojure/test.check {:mvn/version "1.1.0"}
-                      com.cognitect/test-runner
-                      {:local/root "../test-runner"}}
-         :main-opts ["-m" "cognitect.test-runner"
-                     "-d" "src/test/clojure"]}} }
+         :extra-deps {io.github.cognitect-labs/test-runner
+                      {:git/tag "v0.5.0" :git/sha "b3fd0d2"}
+                      org.clojure/test.check {:mvn/version "1.1.0"}}
+         :exec-args {:dirs ["src/test/clojure"]}
+         :main-opts ["-m" "cognitect.test-runner"]
+         :exec-fn cognitect.test-runner.api/test}} }
