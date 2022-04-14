@@ -1,4 +1,4 @@
-FROM jupyter/scipy-notebook:lab-3.2.2
+FROM jupyter/scipy-notebook:lab-3.3.3
 USER root
 RUN apt-get update && \
     apt-get install -y software-properties-common
@@ -9,5 +9,5 @@ RUN apt-get update && \
     apt-get install -y adoptopenjdk-11-hotspot && \
     apt-get install -y bash curl rlwrap && \
     apt-get clean
-RUN wget -qO - https://download.clojure.org/install/linux-install-1.10.3.1020.sh | /bin/bash
+RUN wget -qO - https://download.clojure.org/install/linux-install-1.11.1.1105.sh | /bin/bash
 RUN echo "jovyan ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/jovyan
