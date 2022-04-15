@@ -21,7 +21,7 @@
   :upload {:exec-fn edmondson.google-api/upload
            :exec-args {:token-directory "./tokens"}}
 
-  :jupyter {:extra-deps {clojupyter/clojupyter {:mvn/version "0.3.3-alpha2"}}}
+  :jupyter {:extra-deps {clojupyter/clojupyter {:mvn/version "0.3.3"}}}
 
 
   :depstar
