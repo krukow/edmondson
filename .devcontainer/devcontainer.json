@@ -1,6 +1,6 @@
 {
     "name": "Edmondson",
-    "image": "krukow/edmondson:v1.3.3-dev6",
+    "image": "krukow/edmondson:3.3.3-actions-0",
     "settings": {
         "terminal.integrated.shell.linux": "/bin/bash"
     },

@@ -1,5 +1,5 @@
 {:paths ["src/main/clojure"]
- :deps {org.clojure/clojure {:mvn/version "1.11.1"}
+ :deps {org.clojure/clojure {:mvn/version "1.10.3"}
         com.google.api-client/google-api-client {:mvn/version "1.34.0"}
         com.google.apis/google-api-services-sheets {:mvn/version "v4-rev612-1.25.0"}
         com.google.apis/google-api-services-drive {:mvn/version "v3-rev197-1.25.0"}
