@@ -1,12 +1,12 @@
 {:paths ["src/main/clojure"]
- :deps {org.clojure/clojure {:mvn/version "1.10.3"}
+ :deps {org.clojure/clojure {:mvn/version "1.11.1"}
         com.google.api-client/google-api-client {:mvn/version "1.34.0"}
         com.google.apis/google-api-services-sheets {:mvn/version "v4-rev612-1.25.0"}
         com.google.apis/google-api-services-drive {:mvn/version "v3-rev197-1.25.0"}
         com.google.oauth-client/google-oauth-client-jetty {:mvn/version "1.33.3"}
         clj-http/clj-http {:mvn/version "3.12.3"}
-        cheshire/cheshire {:mvn/version "5.10.2"}
-        incanter/incanter {:mvn/version "1.9.3" :exclusions [com.lowagie/itext]}}
+        cheshire/cheshire {:mvn/version "5.11.0"}
+        kixi/stats {:mvn/version "0.5.5"}}
 
  :aliases
  {:examples {:extra-paths ["src/test/clojure"
@@ -21,8 +21,7 @@
   :upload {:exec-fn edmondson.google-api/upload
            :exec-args {:token-directory "./tokens"}}
 
-  :jupyter {:extra-deps {clojupyter/clojupyter {:mvn/version "0.3.3"}}}
-
+  :jupyter {:extra-deps {clojupyter/clojupyter {:mvn/version "0.3.5"}}}
 
   :depstar
   {:extra-deps
