@@ -1,9 +1,15 @@
 (ns edmondson.survey-analysis
-  (:require [incanter.stats :as istats]
-            [clojure.string :as string]
+  (:require [clojure.string :as string]
             [edmondson.survey-model :as model]
             [edmondson.config :as cfg]
-            [edmondson.utils :as u]))
+            [edmondson.utils :as u]
+            [kixi.stats.core :refer [mean variance standard-deviation histogram]]
+            [kixi.stats.distribution :refer [quantile]]))
+
+(defn calculate-quantiles
+  [nums & {:keys [probs]}]
+  (let [distribution (transduce identity histogram nums)]
+    (map #(quantile distribution %) probs)))
 
 (defn score-answers
   [model-index {answers :answers :as normalized-response}]
@@ -100,10 +106,9 @@
 
         aggregate-scores (map #(let [vs (vals %)
                                      num-answers (count vs)]
-                                 ;;#dbg ^{:break/when (some keyword? vs)}
                                  (let [measures (:measures (meta %))]
                                    (with-meta
-                                     {:mean-score (istats/mean vs)
+                                     {:mean-score (transduce identity mean vs)
                                       :measures (get measures construct)
                                       :num-answers num-answers
                                       :num-questions (count (keys %))}
@@ -112,7 +117,6 @@
 
         complete-answers (filter #(= (:num-answers %) (count qs-keys))
                                  aggregate-scores)
-
         worst-scores (sort-by :mean-score complete-answers)
         best-scores (reverse worst-scores)
 
@@ -126,17 +130,20 @@
 
         construct-measures-stats
         (u/map-values (fn [ms]
-                        (let  [variance (istats/variance ms)]
-                          {:mean (istats/mean ms)
-                           :variance variance
-                           :quantile (istats/quantile
-                                      ms
-                                      :probs [0.0 0.15 0.25 0.5 0.75 0.85 1.0])
-                           :stddev (Math/sqrt variance)}))
+                        {:mean (transduce identity mean ms)
+                         :variance (transduce identity variance ms)
+                         :quantile (calculate-quantiles
+                                    ms
+                                    :probs [0.0 0.15 0.25 0.5 0.75 0.85 1.0])
+                         :stddev (transduce identity standard-deviation ms)})
                       construct-measures)
 
-        score-variance (istats/variance (map :mean-score complete-answers))
-        score-stddev (Math/sqrt score-variance)
+
+        mean-scores (filter (complement nil?) (map :mean-score complete-answers))
+
+        score-variance (transduce identity variance mean-scores)
+
+        score-stddev (transduce identity standard-deviation mean-scores)
 
 
         scores-by-question (apply merge-with
@@ -148,13 +155,14 @@
         ;; ensure everything is a collection, even if only one response
         scores-by-question (u/map-values #(if-not (coll? %) [%] %) scores-by-question)
 
+
         question-stats (u/map-values
-                        #(let [variance (istats/variance %)]
-                           {:score-total (reduce + %)
-                            :score-mean  (istats/mean %)
-                            :score-variance variance
-                            :score-stddev (Math/sqrt variance)})
+                        (fn [vs] {:score-total (reduce + vs)
+                                  :score-mean  (transduce identity mean vs)
+                                  :score-variance (transduce identity variance vs)
+                                  :score-stddev (transduce identity standard-deviation vs)})
                         scores-by-question)
+
 
         worst-question   (->> question-stats
                               (sort-by (comp :score-total second))
@@ -165,13 +173,10 @@
                               (map first))
         varying-question (reverse stable-question)
 
-
-        sub-construct-scores (map :mean-score complete-answers)
-
-        construct-score-total (reduce + 0 sub-construct-scores)
-        construct-mean (istats/mean sub-construct-scores)
-        construct-var (istats/variance sub-construct-scores)
-        construct-stddev (Math/sqrt (istats/variance sub-construct-scores))
+        construct-score-total (reduce + 0 mean-scores)
+        construct-mean (transduce identity mean mean-scores)
+        construct-var (transduce identity variance mean-scores)
+        construct-stddev (transduce identity standard-deviation mean-scores)
 
         prefix-key? (fn [key prefixes]
                       (some #(.startsWith (name key) (name %)) prefixes))

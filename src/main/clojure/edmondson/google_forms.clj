@@ -46,8 +46,9 @@
           model-index (model/index-questions survey-model)
           ]
       {:scored-responses scored-responses
-       :aggregate-results (analysis/aggregate-scores survey-model
-                                                     scored-responses)
+       :aggregate-results
+       (analysis/aggregate-scores survey-model
+                                  scored-responses)
        :model-index model-index
        :num-responses num-responses
        :participation-rate (/ num-responses (float total-team-size))
