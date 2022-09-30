@@ -1,0 +1,5 @@
+FROM krukow/edmondson:lab-3-4-7-clojupyter-0-3-5-base-2
+COPY --chown=jovyan . /home/jovyan/build/
+USER jovyan
+RUN /home/jovyan/build/script/go.sh docker
+RUN /usr/local/bin/clojure -A:upload -P

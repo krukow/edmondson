@@ -1,9 +1,6 @@
 {
     "name": "Edmondson",
-    "image": "krukow/edmondson:lab-3-4-5-clojupyter-0-3-5-dev-1",
-    "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
-    },
+    "image": "krukow/edmondson:lab-3-4-7-clojupyter-0-3-5-dev-2",
     "extensions": [ "ms-toolsai.jupyter"],
     "forwardPorts": [8888, 8889],
     "remoteUser": "jovyan"
