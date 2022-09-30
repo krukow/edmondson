@@ -2,4 +2,4 @@
 set -euo pipefail
 
 jupyter trust examples/google_sheets/*.ipynb
-jupyter lab --port=8889 --config config/jupyter_notebook_config.py
+jupyter lab --port=8889 --config config/jupyter_notebook_config.py --ip=0.0.0.0 --no-browser

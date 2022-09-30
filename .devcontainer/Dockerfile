@@ -1,4 +1,4 @@
-FROM jupyter/scipy-notebook:lab-3.4.5
+FROM jupyter/scipy-notebook:lab-3.4.7
 USER root
 RUN apt-get update && \
     apt-get install -y software-properties-common
