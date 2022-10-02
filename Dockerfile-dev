@@ -1,4 +1,4 @@
-FROM krukow/edmondson:lab-3-4-7-clojupyter-0-3-5-base-2
+FROM krukow/edmondson:lab-3-4-7-clojupyter-0-3-6-base-1-linux-arm64
 COPY --chown=jovyan . /home/jovyan/build/
 USER jovyan
 RUN /home/jovyan/build/script/go.sh docker
