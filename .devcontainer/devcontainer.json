@@ -1,6 +1,6 @@
 {
     "name": "Edmondson",
-    "image": "krukow/edmondson:lab-3-4-7-clojupyter-0-3-5-dev-2",
+    "image": "krukow/edmondson:lab-3-4-7-clojupyter-0-3-6-dev-1-linux-arm64g",
     "extensions": [ "ms-toolsai.jupyter"],
     "forwardPorts": [8888, 8889],
     "remoteUser": "jovyan"
