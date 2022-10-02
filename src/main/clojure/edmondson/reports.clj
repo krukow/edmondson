@@ -1,10 +1,11 @@
 (ns edmondson.reports
   (:require [edmondson.survey-analysis :as analysis]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [clojure.pprint :as pprint]))
 
 (defn fmt-number [x]
   (when x
-    (clojure.pprint/cl-format nil "~,1f" x)))
+    (pprint/cl-format nil "~,1f" x)))
 
 (defn question-text [question-name] question-name)
 

@@ -6,6 +6,7 @@
         com.google.oauth-client/google-oauth-client-jetty {:mvn/version "1.33.3"}
         clj-http/clj-http {:mvn/version "3.12.3"}
         cheshire/cheshire {:mvn/version "5.11.0"}
+        org.slf4j/slf4j-simple {:mvn/version "2.0.3"}
         kixi/stats {:mvn/version "0.5.5"}}
 
  :aliases
@@ -21,7 +22,10 @@
   :upload {:exec-fn edmondson.google-api/upload
            :exec-args {:token-directory "./tokens"}}
 
-  :jupyter {:extra-deps {clojupyter/clojupyter {:mvn/version "0.3.5"}}}
+  :jupyter {:extra-deps {clojupyter/clojupyter
+                         ;;{:local/root "./clojupyter-0.3.6-SNAPSHOT.jar"}
+                         {:mvn/version "0.3.6"}
+                         }}
 
   :depstar
   {:extra-deps
