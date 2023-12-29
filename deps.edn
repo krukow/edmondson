@@ -23,8 +23,8 @@
            :exec-args {:token-directory "./tokens"}}
 
   :jupyter {:extra-deps {clojupyter/clojupyter
-                         ;;{:local/root "./clojupyter-0.3.6-SNAPSHOT.jar"}
-                         {:mvn/version "0.3.6"}
+                         ;;{:local/root "/Users/krukow/code/github/clojupyter/target/clojupyter-0.4.307-standalone.jar"}
+                         {:mvn/version "0.4.319"}
                          }}
 
   :depstar
