@@ -159,6 +159,12 @@ of psychological safety in the example survey data.
 
 That's it - things are working now! Now check out "Next steps" below.
 
+## Building
+
+See: https://github.com/krukow/edmondson/blob/main/doc/jupyter.md and
+in particular https://github.com/krukow/edmondson/blob/main/doc/jupyter.md#local-prerequisites 
+for running locally.
+
 ## Next steps
 One of the following might be good next steps:
 
