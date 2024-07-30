@@ -24,7 +24,7 @@
 
   :jupyter {:extra-deps {clojupyter/clojupyter
                          ;;{:local/root "/Users/krukow/code/github/clojupyter/target/clojupyter-0.4.307-standalone.jar"}
-                         {:mvn/version "0.4.319"}
+                         {:mvn/version "0.4.329"}
                          }}
 
   :depstar
