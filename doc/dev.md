@@ -1,9 +1,12 @@
-# Documentation
+# Developer Notes
 
-TBD
+This document contains technical notes for maintainers about building Docker containers and other advanced development tasks.
 
+**For general development setup, testing, and building instructions, see [../DEVELOPMENT.md](../DEVELOPMENT.md).**
 
-## Building base container
+## Docker Container Management
+
+### Building base container
 
 0. Select a build name, e.g. `export BUILD=lab-3-4-5-clojupyter-0-3-5-base-1`
 
@@ -16,7 +19,7 @@ TBD
 3. run `docker push krukow/edmondson:$BUILD`
 
 
-## Building a -dev docker container
+### Building a -dev docker container
 
 Use the latest `$BUILD` (see building base container).
 

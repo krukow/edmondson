@@ -159,11 +159,12 @@ of psychological safety in the example survey data.
 
 That's it - things are working now! Now check out "Next steps" below.
 
-## Building
+## Building and Development
 
-See: https://github.com/krukow/edmondson/blob/main/doc/jupyter.md and
-in particular https://github.com/krukow/edmondson/blob/main/doc/jupyter.md#local-prerequisites 
-for running locally.
+For comprehensive information about building, testing, and developing Edmondson, see:
+- **[DEVELOPMENT.md](./DEVELOPMENT.md)** - Complete development and testing guide
+- [doc/jupyter.md](./doc/jupyter.md) - Jupyter setup and usage
+- [doc/contributing.md](./doc/contributing.md) - Contributing guidelines
 
 ## Next steps
 One of the following might be good next steps:
